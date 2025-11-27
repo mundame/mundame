@@ -1,1 +1,276 @@
-<h1>this is the journal</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal</title>
+    <!-- Load Tailwind CSS via CDN for rapid styling --><script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles inherited from other pages */
+        body {
+            /* Replace 'paper.jpg' with your actual background image URL */
+            background-image: url('paper.jpg'); 
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            /* FONT: Helvetica */
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        /* Global Reset for robust layout */
+        *, *::before, *::after {
+            box-sizing: border-box; 
+        }
+        
+        /* Enforce link styling */
+        h1 a {
+            text-decoration: none;
+            color: black;
+        }
+        
+        .journal-entry {
+            transition: all 0.2s;
+        }
+        .journal-entry:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 4px, 6px, 0.05); /* Adjusted shadow for clarity */
+            transform: translateY(-2px);
+        }
+        
+        /* Ensures the inner image is centered within the fixed-height container */
+        .slide-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Important: Ensures the whole image is visible */
+            border-radius: 6px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Overlay to make the whole thumbnail area clickable to open the lightbox */
+        .slideshow-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            cursor: zoom-in;
+            z-index: 9; /* INCREASED Z-INDEX: Higher than the images (default 0) but lower than buttons (z-10) */
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header Block (Consistent with other pages) -->
+    <header class="pt-4 pb-4">
+        <h1 class="text-4xl text-center font-bold mb-0">
+            <a href="https://mundame.github.io/mundame/">mundame</a>
+        </h1>
+        <!-- Subheading 'journal' -->
+        <h2 class="text-xl text-center font-normal text-gray-700 mt-1">journal</h2>
+    </header>
+
+    <!-- Main Content: Journal Entries -->
+    <main class="container mx-auto p-4 md:p-8 max-w-4xl">
+        
+        <!-- List of Journal Entries (Reverse Chronological) -->
+        <div class="space-y-6">
+
+            <!-- Entry 1 (Most Recent) - SLIDESHOW - ABSOLUTE POSITIONING METHOD -->
+            <div class="journal-entry bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-center mb-4 border-b pb-2 border-gray-300">
+                    <h3 class="text-xl font-bold">remote work</h3>
+                    <p class="text-sm text-gray-600">November 27, 2025</p>
+                </div>
+                
+                <!-- Slideshow Container (Thumbnail) -->
+                <div id="slideshow-1" class="relative w-full overflow-hidden h-96">
+                    
+                    <!-- Clickable Overlay to open Lightbox -->
+                    <div class="slideshow-overlay" onclick="openJournalLightbox(1)"></div>
+
+                    <!-- Slides Container: Absolute positioning is now used -->
+                    <div id="slides-container-1" class="relative h-full w-full">
+                        
+                        <!-- Slide 1: Initially visible (opacity-100) -->
+                        <div id="slide-1-0" class="absolute inset-0 h-full flex items-center justify-center opacity-100 transition-opacity duration-300">
+                            <img src="nov272025pg1.jpeg" class="slide-image" alt="Journal Page 1: Remote Work">
+                        </div>
+                        <!-- Slide 2: Initially hidden (opacity-0) -->
+                        <div id="slide-1-1" class="absolute inset-0 h-full flex items-center justify-center opacity-0 transition-opacity duration-300">
+                            <img src="nov272025pg2.jpeg" class="slide-image" alt="Journal Page 2: Remote Work">
+                        </div>
+                        <!-- Slide 3: Initially hidden (opacity-0) -->
+                        <div id="slide-1-2" class="absolute inset-0 h-full flex items-center justify-center opacity-0 transition-opacity duration-300">
+                            <img src="nov272025pg3.jpeg" class="slide-image" alt="Journal Page 3: Remote Work">
+                        </div>
+                        
+                    </div>
+
+                    <!-- Next Button (Right Arrow) -->
+                    <button onclick="changeSlide(1, 1)" class="absolute right-0 top-1/2 transform -translate-y-1/2 p-3 bg-black/50 text-white text-3xl font-bold rounded-l-lg hover:bg-black/70 transition duration-150 z-10 opacity-80 hover:opacity-100 focus:outline-none">
+                        &#10095;
+                    </button>
+                    <!-- Prev Button (Left Arrow) -->
+                    <button onclick="changeSlide(1, -1)" class="absolute left-0 top-1/2 transform -translate-y-1/2 p-3 bg-black/50 text-white text-3xl font-bold rounded-r-lg hover:bg-black/70 transition duration-150 z-10 opacity-80 hover:opacity-100 focus:outline-none">
+                        &#10094;
+                    </button>
+                </div>
+            </div>
+
+            <!-- Entry 2 (Placeholder) -->
+            <div class="journal-entry bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-center mb-4 border-b pb-2 border-gray-300">
+                    <h3 class="text-xl font-bold">The Quiet of Pen and Ink</h3>
+                    <p class="text-sm text-gray-600">October 15, 2025</p>
+                </div>
+                <div class="h-96 overflow-hidden flex justify-center items-center">
+                    <img src="https://placehold.co/800x400/e0e0e0/333?text=Journal+Page%3A+Pen+and+Ink+Thoughts" 
+                         alt="Scanned image of journal entry regarding ink drawings"
+                         loading="lazy"
+                         class="slide-image">
+                </div>
+            </div>
+
+            <!-- Entry 3 (Placeholder) -->
+            <div class="journal-entry bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-center mb-4 border-b pb-2 border-gray-300">
+                    <h3 class="text-xl font-bold">First Watercolor Attempt: Motel</h3>
+                    <p class="text-sm text-gray-600">September 05, 2025</p>
+                </div>
+                <div class="h-96 overflow-hidden flex justify-center items-center">
+                    <img src="https://placehold.co/800x400/d0d0d0/333?text=Journal+Page%3A+Motel+Watercolour+Notes" 
+                         alt="Scanned image of journal entry regarding the motel watercolor"
+                         loading="lazy"
+                         class="slide-image">
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+    
+    <!-- Journal Lightbox Structure (Dynamically generated content will be placed here) -->
+    <div id="journal-lightbox" class="fixed inset-0 bg-black bg-opacity-95 hidden z-50 transition-opacity duration-300" onclick="closeJournalLightbox()">
+        <!-- Content inserted by JS -->
+    </div>
+
+
+    <script>
+        // Data structure to hold images and current index for each slideshow
+        const slideshowData = {
+            1: {
+                images: [
+                    "nov272025pg1.jpeg",
+                    "nov272025pg2.jpeg",
+                    "nov272025pg3.jpeg"
+                ],
+                index: 0
+            }
+        };
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup ESC key listener
+            document.addEventListener('keydown', (e) => {
+                const lightbox = document.getElementById('journal-lightbox');
+                if (e.key === 'Escape' && lightbox && !lightbox.classList.contains('hidden')) {
+                    closeJournalLightbox();
+                }
+            });
+        });
+
+        function changeSlide(slideshowId, direction) {
+            const data = slideshowData[slideshowId];
+            if (!data) return;
+
+            const maxSlides = data.images.length;
+            const currentIndex = data.index;
+            
+            // 1. Calculate new index, handling wrapping
+            let newIndex = (currentIndex + direction);
+            if (newIndex < 0) {
+                newIndex = maxSlides - 1; // Wrap backward
+            } else if (newIndex >= maxSlides) {
+                newIndex = 0; // Wrap forward
+            }
+            
+            // --- Apply opacity change to Thumbnail Slideshow ---
+            const currentThumbSlide = document.getElementById(`slide-${slideshowId}-${currentIndex}`);
+            const newThumbSlide = document.getElementById(`slide-${slideshowId}-${newIndex}`);
+            
+            if (currentThumbSlide) currentThumbSlide.classList.remove('opacity-100');
+            if (newThumbSlide) newThumbSlide.classList.add('opacity-100');
+
+
+            // --- Apply opacity change to Lightbox Slideshow (if open) ---
+            const currentLightboxSlide = document.getElementById(`lightbox-slide-${slideshowId}-${currentIndex}`);
+            const newLightboxSlide = document.getElementById(`lightbox-slide-${slideshowId}-${newIndex}`);
+
+            if (currentLightboxSlide) currentLightboxSlide.classList.remove('opacity-100');
+            if (newLightboxSlide) newLightboxSlide.classList.add('opacity-100');
+            
+            // Update the global index
+            data.index = newIndex;
+        }
+
+
+        function openJournalLightbox(slideshowId) {
+            const data = slideshowData[slideshowId];
+            if (!data) return;
+
+            const lightbox = document.getElementById('journal-lightbox');
+            
+            // 1. Build the HTML for the slides inside the lightbox using absolute positioning
+            const lightboxSlidesHTML = data.images.map((imageSrc, index) => {
+                // Determine initial opacity based on the current active index
+                const opacityClass = (index === data.index) ? 'opacity-100' : 'opacity-0';
+                
+                return `
+                    <div id="lightbox-slide-${slideshowId}-${index}" 
+                         class="absolute inset-0 h-full w-full flex items-center justify-center transition-opacity duration-300 ${opacityClass}">
+                        
+                        <!-- Added onclick to the image itself to advance the slide (changeSlide) -->
+                        <img src="${imageSrc}" 
+                             class="max-w-full max-h-[95vh] object-contain cursor-pointer" 
+                             alt="Journal Page ${index + 1}"
+                             onclick="changeSlide(${slideshowId}, 1)">
+                    </div>
+                `;
+            }).join('');
+
+            // 2. Set the inner HTML of the lightbox container
+            lightbox.innerHTML = `
+                <div id="lightbox-content-${slideshowId}" class="relative w-full h-full max-w-6xl max-h-[100vh] mx-auto p-4 flex items-center justify-center" onclick="event.stopPropagation()">
+                    
+                    <!-- Close Button -->
+                    <button onclick="closeJournalLightbox()" class="absolute top-4 right-4 text-white text-4xl font-bold p-3 leading-none hover:text-gray-300 transition duration-150 z-20 rounded-full bg-black/50 hover:bg-black/80">
+                        &times;
+                    </button>
+                    
+                    <!-- Slides Container: Now just a full-width wrapper for the absolute slides -->
+                    <div class="relative h-full w-full">
+                        ${lightboxSlidesHTML}
+                    </div>
+
+                    <!-- Next Button (Right Arrow) - Still visible for visual cue -->
+                    <button onclick="changeSlide(${slideshowId}, 1)" class="absolute right-0 top-1/2 transform -translate-y-1/2 p-4 bg-black/50 text-white text-4xl font-bold rounded-l-lg hover:bg-black/70 transition duration-150 z-10 opacity-80 hover:opacity-100 focus:outline-none">
+                        &#10095;
+                    </button>
+                    <!-- Prev Button (Left Arrow) - Still visible for visual cue -->
+                    <button onclick="changeSlide(${slideshowId}, -1)" class="absolute left-0 top-1/2 transform -translate-y-1/2 p-4 bg-black/50 text-white text-4xl font-bold rounded-r-lg hover:bg-black/70 transition duration-150 z-10 opacity-80 hover:opacity-100 focus:outline-none">
+                        &#10094;
+                    </button>
+                </div>
+            `;
+            
+            // 3. Display the lightbox and hide scrollbar
+            lightbox.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeJournalLightbox() {
+            document.getElementById('journal-lightbox').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+    </script>
+
+</body>
+</html>
