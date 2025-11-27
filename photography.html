@@ -1,1 +1,203 @@
-<h1>ich mache sehr gute fotos</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography - Art</title>
+    <!-- Load Tailwind CSS via CDN for rapid styling --><script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles inherited from other pages */
+        body {
+            /* Replace 'paper.jpg' with your actual background image URL */
+            background-image: url('paper.jpg'); 
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            /* FONT: Helvetica */
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        /* Enforce link styling */
+        h1 a {
+            text-decoration: none;
+            color: black;
+        }
+        
+        /* Photo Card Styling: RESTORED SHADOWS AND BACKGROUND EFFECTS */
+        .photo-card {
+            background-color: rgba(255, 255, 255, 0.7); /* bg-white/70 */
+            backdrop-filter: blur(2px); /* backdrop-blur-sm */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* shadow-md */
+            border-radius: 0.5rem; /* rounded-lg */
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .photo-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl equivalent */
+        }
+
+        /* Enforce image object fit and height for the grid */
+        .photo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures images fill the fixed-height container */
+            border-radius: 6px 6px 0 0; /* Only round top corners */
+        }
+        
+        /* Remove redundant shadow from image tag itself, as the card has it */
+        .photo-card .photo-img {
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Data Structure for Photography Gallery -->
+    <script>
+        const photographyData = [
+            { id: 1, title: "windowman", image: "windowman.JPG", caption: "A man framed by a window, emphasizing natural light and shadow. Medium: Pentax 35mm film camera, color ISO 400.", year: 2025, keywords: "windowman portrait light shadow 2025 Pentax 35mm film camera color ISO 400" },
+            { id: 2, title: "Forest Path", image: "https://placehold.co/800x1200/e0e0e0/333?text=Forest+Path", caption: "Sunlight through the canopy on a trail.", year: 2023, keywords: "nature forest green trees light" },
+            { id: 3, title: "Ocean Mist", image: "https://placehold.co/800x800/d0d0d0/333?text=Ocean+Mist", caption: "Long exposure of waves breaking on the shore.", year: 2024, keywords: "ocean water mist long exposure" },
+            { id: 4, title: "Abstract Detail", image: "https://placehold.co/1200x800/c0c0c0/333?text=Abstract+Detail", caption: "Close-up macro shot of rusted metal.", year: 2022, keywords: "macro texture metal rust abstract" },
+            { id: 5, title: "Portrait in Shade", image: "https://placehold.co/600x900/b0b0b0/333?text=Portrait+in+Shade", caption: "Monochromatic portrait emphasizing shadow.", year: 2024, keywords: "portrait black white shadow monochrome" }
+        ];
+        
+        // State to track the currently active image in the lightbox
+        let currentPhotoIndex = 0;
+
+        function renderGallery() {
+            const gallery = document.getElementById('photo-gallery');
+            if (!gallery) return;
+
+            // Simple map to create the gallery HTML structure
+            const htmlContent = photographyData.map((photo, index) => `
+                <div class="photo-card" onclick="openLightbox(${index})">
+                    <div class="h-80 md:h-96 rounded-t-lg overflow-hidden">
+                        <img src="${photo.image}" alt="${photo.title}" class="photo-img">
+                    </div>
+                    <div class="p-3 text-center">
+                        <h4 class="font-bold text-lg">${photo.title}</h4>
+                        <p class="text-xs text-gray-600">${photo.year}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            gallery.innerHTML = htmlContent;
+        }
+        
+        function updateLightbox() {
+            const photo = photographyData[currentPhotoIndex];
+            if (!photo) return;
+            
+            const lightboxImage = document.getElementById('lightbox-image');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+            const lightboxCounter = document.getElementById('lightbox-counter');
+            
+            lightboxImage.src = photo.image;
+            lightboxCaption.innerHTML = `<strong>${photo.title} (${photo.year})</strong>: ${photo.caption}`;
+            lightboxCounter.textContent = `${currentPhotoIndex + 1} / ${photographyData.length}`;
+        }
+
+        function changePhoto(direction) {
+            let newIndex = currentPhotoIndex + direction;
+            const maxIndex = photographyData.length - 1;
+
+            if (newIndex < 0) {
+                newIndex = maxIndex; // Wrap to end
+            } else if (newIndex > maxIndex) {
+                newIndex = 0; // Wrap to start
+            }
+            currentPhotoIndex = newIndex;
+            updateLightbox();
+        }
+
+        function openLightbox(index) {
+            currentPhotoIndex = index;
+            updateLightbox();
+            document.getElementById('lightbox').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Initialize gallery and set up listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGallery();
+            
+            // Setup ESC key listener for lightbox
+            document.addEventListener('keydown', (e) => {
+                const lightbox = document.getElementById('lightbox');
+                if (e.key === 'Escape' && lightbox && !lightbox.classList.contains('hidden')) {
+                    closeLightbox();
+                }
+                // Handle arrow keys for navigation
+                if (!lightbox.classList.contains('hidden')) {
+                    if (e.key === 'ArrowRight') {
+                        changePhoto(1);
+                    } else if (e.key === 'ArrowLeft') {
+                        changePhoto(-1);
+                    }
+                }
+            });
+        });
+
+    </script>
+    
+    <!-- Header Block (Consistent with other pages) -->
+    <header class="pt-4 pb-8"> 
+        <h1 class="text-4xl text-center font-bold mb-0"> 
+            <a href="https://mundame.github.io/mundame/">mundame</a>
+        </h1>
+        <h2 class="text-xl text-center font-normal text-gray-700 mt-2">photography</h2>
+    </header>
+
+    <!-- Main Content: Gallery Grid -->
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <div id="photo-gallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Photos dynamically generated here -->
+        </div>
+
+    </main>
+
+    <!-- Lightbox/Modal Structure -->
+    <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-95 hidden z-50 flex items-center justify-center transition-opacity duration-300">
+        
+        <!-- Lightbox Content Area -->
+        <div class="relative w-full h-full max-w-7xl max-h-[100vh] mx-auto flex items-center justify-center" onclick="event.stopPropagation()">
+            
+            <!-- Image -->
+            <img id="lightbox-image" 
+                 src="" 
+                 alt="Full screen photograph" 
+                 class="max-w-full max-h-[90vh] object-contain"
+            />
+            
+            <!-- Close Button -->
+            <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-4xl font-bold p-3 leading-none hover:text-gray-300 transition duration-150 z-20 rounded-full bg-black/50 hover:bg-black/80">
+                &times;
+            </button>
+            
+            <!-- Navigation Buttons -->
+            <button onclick="changePhoto(-1)" class="absolute left-4 top-1/2 transform -translate-y-1/2 p-4 text-white text-4xl bg-black/50 hover:bg-black/70 rounded-full z-10 transition duration-150">
+                &#10094;
+            </button>
+            <button onclick="changePhoto(1)" class="absolute right-4 top-1/2 transform -translate-y-1/2 p-4 text-white text-4xl bg-black/50 hover:bg-black/70 rounded-full z-10 transition duration-150">
+                &#10095;
+            </button>
+            
+            <!-- Caption and Counter -->
+            <div class="absolute bottom-0 left-0 right-0 p-4 bg-black/50 text-white z-10">
+                <p id="lightbox-caption" class="text-sm"></p>
+                <p id="lightbox-counter" class="text-xs mt-1 text-gray-400"></p>
+            </div>
+            
+        </div>
+    </div>
+
+</body>
+</html>
