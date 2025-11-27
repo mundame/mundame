@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watercolor - Art</title>
+    <!-- Load Tailwind CSS via CDN for rapid styling --><script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles inherited from works.html */
+        body {
+            /* Replace 'paper.jpg' with your actual background image URL */
+            background-image: url('paper.jpg'); 
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            /* FONT: Helvetica */
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        /* Enforce link styling */
+        h1 a {
+            text-decoration: none;
+            color: black;
+        }
+        
+        /* Ensure the image has the correct style */
+        .art-image {
+             transition: transform 0.3s ease;
+             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+             width: 100%; /* Ensure image fills container */
+             height: auto;
+             object-fit: contain; /* Use contain for full image visibility */
+        }
+        
+        /* Custom styling for the search input */
+        #search-input {
+            transition: all 0.2s;
+            border-width: 1px;
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+        #search-input:focus {
+            border-color: #000;
+            outline: none;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Style to ensure info panel is readable and positioned correctly */
+        #lightbox-info-panel {
+            right: 1rem; 
+            top: 1rem;
+            max-height: 95%;
+            width: 90%;
+            height: 50%;
+            max-width: 400px;
+            transform: translate(0, 0); 
+            background-color: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(8px);
+        }
+        #lightbox > div {
+             flex-direction: row;
+             align-items: flex-start;
+             justify-content: center;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header Block (Consistent with other detail pages) --><header class="pt-4 pb-4">
+        <h1 class="text-4xl text-center font-bold mb-0">
+            <a href="https://mundame.github.io/mundame/">mundame</a>
+        </h1>
+        <!-- Subheading 'art', which is clickable back to art gallery -->
+        <h2 class="text-xl text-center font-normal text-gray-700 mt-1">
+            <a href="https://mundame.github.io/mundame/art.html" class="text-black no-underline hover:underline">art</a>
+        </h2>
+    </header>
+
+    <!-- Main Content: Watercolor Search Gallery --><main class="container mx-auto p-4 md:p-8">
+        
+        <!-- Wrapper for Title and Search Bar --><div class="max-w-3xl mx-auto mb-6">
+            
+            <!-- Title - CENTER aligned --><h3 class="text-3xl font-semibold text-center mb-4">watercolor</h3>
+            
+            <!-- Search Bar --><input type="text" id="search-input" placeholder="search titles, medium, or year..."
+                   class="w-full p-2 rounded-lg bg-white/50 backdrop-blur-sm shadow-md" />
+        </div>
+        
+        <!-- Art List Container (Scrollable Gallery) --><div id="art-list" class="space-y-8">
+            <!-- Art items will be rendered here by JavaScript --></div>
+
+    </main>
+    
+    <!-- Lightbox/Modal Structure for Full-Screen View --><div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 hidden z-50 flex items-center justify-center transition-opacity duration-300">
+        <div class="relative max-w-full max-h-full p-4" onclick="event.stopPropagation()">
+            
+            <!-- Info Panel (Initially hidden) -->
+            <div id="lightbox-info-panel" class="absolute w-full md:w-96 md:h-full bg-white/95 backdrop-blur-md p-6 overflow-y-auto hidden z-50 rounded-lg shadow-2xl" onclick="event.stopPropagation()">
+                <h4 id="info-title" class="text-2xl font-bold mb-4 text-black"></h4>
+                <div id="info-details" class="text-black"></div>
+            </div>
+
+            <!-- Image Container -->
+            <img id="lightbox-image" 
+                 src="" 
+                 alt="Full screen art view" 
+                 class="max-w-full max-h-[90vh] object-contain cursor-pointer" 
+                 onclick="closeLightbox()"
+            />
+
+            <!-- Info Toggle Button (Top right corner) -->
+            <button id="info-toggle-button" onclick="toggleInfoPanel(event)" 
+                    class="absolute top-4 right-16 text-white text-3xl font-bold p-2 leading-none hover:text-gray-300 transition duration-150 rounded-full bg-black/50 hover:bg-black/70 w-10 h-10 flex items-center justify-center opacity-70 hover:opacity-100">
+                i
+            </button>
+            
+            <!-- Close Button (Absolute top right) -->
+            <button onclick="closeLightbox()" 
+                    class="absolute top-4 right-4 text-white text-3xl font-bold p-2 leading-none hover:text-gray-300 transition duration-150 rounded-full bg-black/50 hover:bg-black/70 w-10 h-10 flex items-center justify-center opacity-70 hover:opacity-100">
+                &times;
+            </button>
+            
+        </div>
+    </div>
+    
+    <script>
+        // Array of art data for dynamic rendering and searching
+        const watercolorArt = [
+            { 
+                id: 1, 
+                title: 'Motel', // Uses the title associated with motel.jpeg
+                image: 'motel.jpeg', 
+                description: 'A vibrant study of light and color on architectural elements, utilizing wet-on-wet watercolor techniques to create soft, bleeding edges.',
+                medium: 'Watercolor',
+                year: '2024', 
+                keywords: 'motel architecture color light 2024' 
+            },
+            { 
+                id: 2, 
+                title: 'Landscape Study', 
+                image: 'https://placehold.co/800x600/c0c0c0/333?text=Watercolor+2', 
+                description: 'An impressionistic landscape capturing morning mist over a field, executed with controlled washes and minimal detail.', 
+                medium: 'Watercolor',
+                year: '2023',
+                keywords: 'landscape mist nature washes 2023'
+            },
+            { 
+                id: 3, 
+                title: 'Floral Detail', 
+                image: 'https://placehold.co/800x600/d0d0d0/333?text=Watercolor+3', 
+                description: 'A close-up of a single flower, focusing on the transparency and layering effects unique to the watercolor medium.', 
+                medium: 'Watercolor on Paper',
+                year: '2025',
+                keywords: 'floral flower transparent detail 2025' 
+            }
+        ];
+
+        // Lightbox Functions
+        function toggleInfoPanel(event) {
+            event.stopPropagation(); // Prevent closing the lightbox
+            const infoPanel = document.getElementById('lightbox-info-panel');
+            infoPanel.classList.toggle('hidden');
+        }
+
+        function openLightbox(event, linkElement) {
+            event.preventDefault(); 
+            
+            const anchor = linkElement.closest('a');
+            if (!anchor) return;
+            
+            const artId = parseInt(anchor.dataset.artId);
+            const artItem = watercolorArt.find(item => item.id === artId);
+            
+            if (!artItem) return; 
+            
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+
+            // Populate Info Panel
+            const infoPanel = document.getElementById('lightbox-info-panel');
+            document.getElementById('info-title').textContent = artItem.title;
+            document.getElementById('info-details').innerHTML = `
+                <p class="text-lg mb-3">${artItem.description || 'No detailed description available.'}</p>
+                <p class="text-sm text-gray-700">Medium: ${artItem.medium} | Year: ${artItem.year}</p>
+            `;
+            
+            // Hide info panel by default when opening
+            infoPanel.classList.add('hidden');
+            
+            // Set image source and show lightbox
+            lightboxImage.src = artItem.image;
+            lightbox.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.add('hidden');
+            document.body.style.overflow = ''; 
+        }
+        
+        // Function to render the art list based on search query
+        function renderArt() {
+            const artList = document.getElementById('art-list');
+            const searchInput = document.getElementById('search-input');
+            
+            if (!artList || !searchInput) return; 
+
+            const query = searchInput.value.toLowerCase();
+            
+            const filteredArt = watercolorArt.filter(item => 
+                item.keywords.toLowerCase().includes(query)
+            );
+
+            let htmlContent = filteredArt.map(item => `
+                <div class="max-w-3xl mx-auto bg-white/50 backdrop-blur-sm p-6 rounded-lg shadow-xl">
+                    
+                    <h4 class="text-2xl font-bold text-center mb-6">${item.title}</h4>
+
+                    <!-- Art Image wrapped in a clickable link for lightbox --><div class="flex justify-center mb-6">
+                        <a href="${item.image}" onclick="openLightbox(event, this)" class="block" data-art-id="${item.id}">
+                            <img src="${item.image}" 
+                                 alt="${item.title}" 
+                                 class="art-image max-w-full rounded-lg">
+                        </a>
+                    </div>
+
+                    <!-- Description/Details --><div class="text-center">
+                        <p class="text-sm text-gray-600">
+                            Medium: ${item.medium} | Year: ${item.year}
+                        </p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Update the DOM
+            if (htmlContent === '' && query !== '') {
+                 artList.innerHTML = `<p class="text-center text-xl text-gray-700 mt-12">No results found for "${query}".</p>`;
+            } else {
+                 artList.innerHTML = htmlContent;
+            }
+        }
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            renderArt();
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                 searchInput.addEventListener('input', renderArt);
+            }
+        });
+
+        // Close lightbox via ESC key and overlay click
+        document.addEventListener('keydown', (e) => {
+             const lightbox = document.getElementById('lightbox');
+             if (e.key === 'Escape' && lightbox && !lightbox.classList.contains('hidden')) {
+                 closeLightbox();
+             }
+        });
+    </script>
+
+</body>
+</html>
