@@ -1,19 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art</title>
+    <!-- Load Tailwind CSS via CDN for rapid styling --><script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles to incorporate your existing background image and h1/h2 styles */
+        body {
+            /* Replace 'paper.jpg' with your actual background image URL */
+            background-image: url('paper.jpg'); 
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            /* UPDATED FONT: Helvetica - This ensures all text uses this stack */
+            font-family: Helvetica, Arial, sans-serif;
+        }
 
+        /* Enforce link styling from your original design */
+        h1 a {
+            text-decoration: none;
+            color: black;
+        }
+        
+        /* Ensure the images have the saturated filter */
+        .art-image {
+             /* filter: saturate(1000%); is REMOVED to show natural colors */
+             transition: transform 0.3s ease;
+             cursor: pointer; /* Indicate it's clickable */
+        }
+        
+        .art-image:hover {
+             /* Add a subtle zoom on hover */
+             transform: scale(1.03); 
+        }
+        
+        /* Style for the video element to match the image containers */
+        video {
+            display: block;
+            cursor: pointer; /* Indicate it's clickable */
+        }
+
+    </style>
 </head>
+<body class="min-h-screen">
 
-<body>
-	
+    <!-- Header and Navigation Menu -->
+    <header class="pt-4 pb-8"> <!-- Adjusted padding for the new subheading -->
+        <h1 class="text-4xl text-center font-bold mb-0"> <!-- REMOVED mb-4 -->
+            <!-- Updated href to the user's specific homepage URL --><a href="https://mundame.github.io/mundame/">mundame</a>
+        </h1>
+        <!-- INSERTED: New subheading for the word 'art' -->
+        <h2 class="text-xl text-center font-normal text-gray-700 mt-2">art</h2>
+    </header>
 
-	<img src="uhh__her.png">
-	<img src="e.png">
-	<img src="megan_apr13_2025.png">
-	<img src="megan_apr13_2025_first.png">
-	<img src="i_love_megan.png">
-	<img src="he_makes_pixels_<3.png">
-	<img src="i_love_megan_sorryforcallingyoufat.png">
-	<img src="he_makes_pixels_<3_sassypants.png">
+    <!-- Main Content: Art Gallery -->
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <!-- Responsive Image Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-	<!-- what is love in the internet age? -->
+            <!-- Art Piece 1: ms paint (IMAGE FILE - messiaen_still.png) -->
+            <div class="bg-white/50 backdrop-blur-sm hover:shadow-2xl transition-shadow duration-300">
+                <div class="h-96 overflow-hidden">
+                    <!-- Replaced video with image tag and restored lightbox functionality -->
+                    <a href="messiaen_still.png" class="block h-full" onclick="openLightbox(event, this)">
+                        <img id="mspaint-image" 
+                             src="messiaen_still.png" 
+                             alt="MS Paint Still Image: messiaen" 
+                             class="art-image w-full h-full object-cover">
+                    </a>
+                </div>
+                <p class="text-center text-lg font-semibold mt-2 pb-4">ms paint</p>
+            </div>
+
+            <!-- Art Piece 2: pen & ink (IMAGE FILE - mother.jpeg) -->
+            <div class="bg-white/50 backdrop-blur-sm hover:shadow-2xl transition-shadow duration-300">
+                <div class="h-96 overflow-hidden">
+                    <!-- Updated source to mother.jpeg and kept lightbox functionality -->
+                    <a href="mother.jpeg" class="block h-full" onclick="openLightbox(event, this)">
+                        <!-- Updated source to mother.jpeg -->
+                        <img src="mother.jpeg" 
+                             alt="Pen & Ink drawing: mother" 
+                             class="art-image w-full h-full object-cover">
+                    </a>
+                </div>
+                <p class="text-center text-lg font-semibold mt-2 pb-4">pen & ink</p>
+            </div>
+
+            <!-- Art Piece 3 - Watercolor (Image File - motel.jpeg) -->
+            <div class="bg-white/50 backdrop-blur-sm hover:shadow-2xl transition-shadow duration-300">
+                <div class="h-96 overflow-hidden">
+                    <a href="motel.jpeg" class="block h-full" onclick="openLightbox(event, this)">
+                        <!-- The source for the thumbnail -->
+                        <img src="motel.jpeg" 
+                             alt="Watercolor art piece" 
+                             class="art-image w-full h-full object-cover">
+                    </a>
+                </div>
+                <p class="text-center text-lg font-semibold mt-2 pb-4">watercolor</p>
+            </div>
+
+        </div>
+    </main>
+    
+    <!-- Modal/Lightbox Structure -->
+    <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 hidden z-50 flex items-center justify-center cursor-pointer transition-opacity duration-300">
+        <div class="relative max-w-full max-h-full p-4" onclick="event.stopPropagation()">
+            <img id="lightbox-image" 
+                 src="" 
+                 alt="Full screen art view" 
+                 class="max-w-full max-h-[90vh] object-contain cursor-pointer" 
+                 onclick="closeLightbox()"
+            />
+            <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-3xl font-bold p-2 leading-none hover:text-gray-300 transition duration-150">
+                &times;
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Removed toggleVideoPlay function as there is no video anymore.
+        
+        function openLightbox(event, linkElement) {
+            event.preventDefault(); 
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            const imageSrc = linkElement.getAttribute('href'); 
+            lightboxImage.src = imageSrc;
+            lightbox.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.add('hidden');
+            document.body.style.overflow = ''; 
+        }
+
+        document.getElementById('lightbox').addEventListener('click', closeLightbox);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !document.getElementById('lightbox').classList.contains('hidden')) {
+                closeLightbox();
+            }
+        });
+    </script>
+
 </body>
+</html>
