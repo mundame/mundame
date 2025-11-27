@@ -44,33 +44,23 @@
             box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
         }
         
-        /* Style to ensure info panel is readable */
+        /* Style to ensure info panel is readable and positioned correctly */
         #lightbox-info-panel {
-            /* Ensures the panel appears on the right/top of the image for desktop/mobile */
-            /* If screen is wide, panel is offset from the right edge */
             right: 1rem; 
             top: 1rem;
             max-height: 95%;
-            
-            /* Add some responsive sizing for small screens */
             width: 90%;
             height: 50%;
             max-width: 400px;
-            
-            /* Position relative to the image container */
             transform: translate(0, 0); 
-            
-            /* Apply the overlay style to the panel */
             background-color: rgba(255, 255, 255, 0.95); 
             backdrop-filter: blur(8px);
         }
-        /* Override default lightbox image positioning to fit the panel */
         #lightbox > div {
              flex-direction: row;
              align-items: flex-start;
              justify-content: center;
         }
-
     </style>
 </head>
 <body class="min-h-screen">
@@ -79,7 +69,7 @@
         <h1 class="text-4xl text-center font-bold mb-0">
             <a href="https://mundame.github.io/mundame/">mundame</a>
         </h1>
-        <!-- Subheading 'art', which is now clickable back to art gallery -->
+        <!-- Subheading 'art', which is clickable back to art gallery -->
         <h2 class="text-xl text-center font-normal text-gray-700 mt-1">
             <a href="https://mundame.github.io/mundame/art.html" class="text-black no-underline hover:underline">art</a>
         </h2>
@@ -174,15 +164,13 @@
         function openLightbox(event, linkElement) {
             event.preventDefault(); 
             
-            // Get data ID and find the corresponding art item
-            // Defensive check: Ensure linkElement and its closest anchor tag exist
             const anchor = linkElement.closest('a');
             if (!anchor) return;
             
             const artId = parseInt(anchor.dataset.artId);
             const artItem = penInkArt.find(item => item.id === artId);
             
-            if (!artItem) return; // Defensive check
+            if (!artItem) return; 
             
             const lightbox = document.getElementById('lightbox');
             const lightboxImage = document.getElementById('lightbox-image');
@@ -215,16 +203,14 @@
             const artList = document.getElementById('art-list');
             const searchInput = document.getElementById('search-input');
             
-            if (!artList || !searchInput) return; // Defensive check for element existence
+            if (!artList || !searchInput) return; 
 
             const query = searchInput.value.toLowerCase();
             
-            // 1. Filter the art array based on the search query
             const filteredArt = penInkArt.filter(item => 
                 item.keywords.toLowerCase().includes(query)
             );
 
-            // 2. Build the HTML content as a single string
             let htmlContent = filteredArt.map(item => `
                 <div class="max-w-3xl mx-auto bg-white/50 backdrop-blur-sm p-6 rounded-lg shadow-xl">
                     
@@ -246,7 +232,7 @@
                 </div>
             `).join('');
 
-            // 3. Update the DOM once
+            // Update the DOM
             if (htmlContent === '' && query !== '') {
                  artList.innerHTML = `<p class="text-center text-xl text-gray-700 mt-12">No results found for "${query}".</p>`;
             } else {
@@ -261,14 +247,17 @@
             if (searchInput) {
                  searchInput.addEventListener('input', renderArt);
             }
-        });
-
-        // Close lightbox via ESC key
-        document.addEventListener('keydown', (e) => {
-             const lightbox = document.getElementById('lightbox');
-             if (e.key === 'Escape' && lightbox && !lightbox.classList.contains('hidden')) {
-                 closeLightbox();
-             }
+             // Setup listeners for lightbox outside of renderArt, once the DOM is ready
+            document.addEventListener('keydown', (e) => {
+                 const lightbox = document.getElementById('lightbox');
+                 if (e.key === 'Escape' && lightbox && !lightbox.classList.contains('hidden')) {
+                     closeLightbox();
+                 }
+            });
+            const lightboxOverlay = document.getElementById('lightbox');
+            if (lightboxOverlay) {
+                lightboxOverlay.addEventListener('click', closeLightbox);
+            }
         });
     </script>
 
