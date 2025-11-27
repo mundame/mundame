@@ -45,22 +45,16 @@
         }
         
         /* Style to ensure info panel is readable and positioned correctly */
+        /* Note: Using Tailwind classes 'fixed top-4 right-4' inline for positioning robustness */
         #lightbox-info-panel {
-            right: 1rem; 
-            top: 1rem;
             max-height: 95%;
             width: 90%;
             height: 50%;
             max-width: 400px;
-            transform: translate(0, 0); 
             background-color: rgba(255, 255, 255, 0.95); 
             backdrop-filter: blur(8px);
         }
-        #lightbox > div {
-             flex-direction: row;
-             align-items: flex-start;
-             justify-content: center;
-        }
+        /* Removed custom styling for #lightbox > div, relying on Tailwind centering */
     </style>
 </head>
 <body class="min-h-screen">
@@ -93,8 +87,8 @@
     <!-- Lightbox/Modal Structure for Full-Screen View --><div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 hidden z-50 flex items-center justify-center transition-opacity duration-300">
         <div class="relative max-w-full max-h-full p-4" onclick="event.stopPropagation()">
             
-            <!-- Info Panel (Initially hidden) -->
-            <div id="lightbox-info-panel" class="absolute w-full md:w-96 md:h-full bg-white/95 backdrop-blur-md p-6 overflow-y-auto hidden z-50 rounded-lg shadow-2xl" onclick="event.stopPropagation()">
+            <!-- Info Panel (Now uses fixed positioning relative to viewport for robustness) -->
+            <div id="lightbox-info-panel" class="fixed w-full md:w-96 md:h-full bg-white/95 backdrop-blur-md p-6 overflow-y-auto hidden z-[60] rounded-lg shadow-2xl top-4 right-4" onclick="event.stopPropagation()">
                 <h4 id="info-title" class="text-2xl font-bold mb-4 text-black"></h4>
                 <div id="info-details" class="text-black"></div>
             </div>
@@ -107,13 +101,13 @@
                  onclick="closeLightbox()"
             />
 
-            <!-- Info Toggle Button (Top right corner) -->
+            <!-- Info Toggle Button (Relative positioning kept) -->
             <button id="info-toggle-button" onclick="toggleInfoPanel(event)" 
                     class="absolute top-4 right-16 text-white text-3xl font-bold p-2 leading-none hover:text-gray-300 transition duration-150 rounded-full bg-black/50 hover:bg-black/70 w-10 h-10 flex items-center justify-center opacity-70 hover:opacity-100">
                 i
             </button>
             
-            <!-- Close Button (Absolute top right) -->
+            <!-- Close Button (Relative positioning kept) -->
             <button onclick="closeLightbox()" 
                     class="absolute top-4 right-4 text-white text-3xl font-bold p-2 leading-none hover:text-gray-300 transition duration-150 rounded-full bg-black/50 hover:bg-black/70 w-10 h-10 flex items-center justify-center opacity-70 hover:opacity-100">
                 &times;
